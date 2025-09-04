@@ -6,7 +6,7 @@ import { ComplaintsTable } from "./complaints-table";
 import { Skeleton } from "@/components/ui/skeleton";
 
 export function AdminDashboard() {
-  const { complaints, isLoading } = useComplaints();
+  const { isLoading } = useComplaints();
 
   if (isLoading) {
     return (
@@ -28,8 +28,8 @@ export function AdminDashboard() {
         <h1 className="text-3xl font-bold tracking-tight font-headline">Dasbor Admin</h1>
         <p className="text-muted-foreground">Kelola dan tanggapi keluhan siswa.</p>
       </header>
-      <StatsCards complaints={complaints} />
-      <ComplaintsTable complaints={complaints} />
+      <StatsCards />
+      <ComplaintsTable />
     </div>
   );
 }

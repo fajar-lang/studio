@@ -23,7 +23,7 @@ import {
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
-import { Loader2, Copy } from 'lucide-react';
+import { Loader2, Copy, Send } from 'lucide-react';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -33,9 +33,10 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
+import { ComplaintCategory } from '@/lib/types';
 
 const formSchema = z.object({
-  category: z.enum(['Fasilitas', 'Pengajaran', 'Kantin', 'Perundungan'], {
+  category: z.enum(['Fasilitas', 'Pengajaran', 'Kantin', 'Perundungan', 'Lainnya'], {
     required_error: "Silakan pilih kategori.",
   }),
   text: z.string().min(20, {
@@ -63,7 +64,7 @@ export function ComplaintForm() {
       try {
         const newId = addComplaint({
             ...values,
-            category: values.category as 'Facilities' | 'Teaching' | 'Canteen' | 'Bullying'
+            category: values.category as ComplaintCategory
         });
         setSubmittedId(newId);
         form.reset();
@@ -105,6 +106,7 @@ export function ComplaintForm() {
                     <SelectItem value="Pengajaran">Pengajaran</SelectItem>
                     <SelectItem value="Kantin">Kantin</SelectItem>
                     <SelectItem value="Perundungan">Perundungan</SelectItem>
+                    <SelectItem value="Lainnya">Lainnya</SelectItem>
                   </SelectContent>
                 </Select>
                 <FormMessage />
@@ -128,8 +130,9 @@ export function ComplaintForm() {
               </FormItem>
             )}
           />
-          <Button type="submit" disabled={isPending} className="w-full bg-accent hover:bg-accent/90 text-accent-foreground">
-            {isPending ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : "Kirim Secara Anonim"}
+          <Button type="submit" disabled={isPending} className="w-full">
+            {isPending ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Send className="mr-2 h-4 w-4" />}
+            Kirim Secara Anonim
           </Button>
         </form>
       </Form>

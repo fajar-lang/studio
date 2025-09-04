@@ -2,14 +2,12 @@
 
 import { useMemo } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Complaint } from '@/lib/types';
+import { useComplaints } from '@/hooks/use-complaints';
 import { MessageSquare, Hourglass, CheckCircle, XCircle } from 'lucide-react';
 
-interface StatsCardsProps {
-  complaints: Complaint[];
-}
-
-export function StatsCards({ complaints }: StatsCardsProps) {
+export function StatsCards() {
+  const { complaints } = useComplaints();
+  
   const stats = useMemo(() => {
     return {
       total: complaints.length,

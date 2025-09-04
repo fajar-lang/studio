@@ -1,4 +1,4 @@
-export type ComplaintCategory = 'Fasilitas' | 'Pengajaran' | 'Kantin' | 'Perundungan';
+export type ComplaintCategory = 'Fasilitas' | 'Pengajaran' | 'Kantin' | 'Perundungan' | 'Lainnya';
 
 export type ComplaintStatus = 'Terkirim' | 'Sedang Diproses' | 'Selesai' | 'Ditolak';
 

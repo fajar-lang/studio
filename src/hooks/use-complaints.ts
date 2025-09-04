@@ -39,20 +39,29 @@ export function useComplaints() {
       status: 'Terkirim',
       createdAt: new Date().toISOString(),
     };
-    saveComplaints([complaintToAdd, ...complaints]);
+    const currentComplaints = JSON.parse(localStorage.getItem(COMPLAINTS_STORAGE_KEY) || '[]');
+    saveComplaints([complaintToAdd, ...currentComplaints]);
     return id;
-  }, [complaints, saveComplaints]);
+  }, [saveComplaints]);
 
   const getComplaintById = useCallback((id: string) => {
-    return complaints.find(c => c.id === id);
-  }, [complaints]);
+    const currentComplaints = JSON.parse(localStorage.getItem(COMPLAINTS_STORAGE_KEY) || '[]');
+    return currentComplaints.find((c: Complaint) => c.id === id);
+  }, []);
 
   const updateComplaint = useCallback((id: string, updates: Partial<Complaint>) => {
-    const updatedComplaints = complaints.map(c => 
+    const currentComplaints = JSON.parse(localStorage.getItem(COMPLAINTS_STORAGE_KEY) || '[]');
+    const updatedComplaints = currentComplaints.map((c: Complaint) => 
       c.id === id ? { ...c, ...updates } : c
     );
     saveComplaints(updatedComplaints);
-  }, [complaints, saveComplaints]);
+  }, [saveComplaints]);
 
-  return { complaints, isLoading, addComplaint, getComplaintById, updateComplaint };
+  const deleteComplaint = useCallback((id: string) => {
+    const currentComplaints = JSON.parse(localStorage.getItem(COMPLAINTS_STORAGE_KEY) || '[]');
+    const updatedComplaints = currentComplaints.filter((c: Complaint) => c.id !== id);
+    saveComplaints(updatedComplaints);
+  }, [saveComplaints]);
+
+  return { complaints, isLoading, addComplaint, getComplaintById, updateComplaint, deleteComplaint };
 }
