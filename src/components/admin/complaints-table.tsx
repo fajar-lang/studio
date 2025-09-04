@@ -23,6 +23,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Complaint, ComplaintCategory, ComplaintStatus } from '@/lib/types';
 import { useComplaints } from '@/hooks/use-complaints';
 import { format } from 'date-fns';
+import { id } from 'date-fns/locale';
 import { MoreHorizontal, Bot, Filter } from 'lucide-react';
 import { AssessDialog } from './assess-dialog';
 import { Input } from '../ui/input';
@@ -34,7 +35,7 @@ interface ComplaintsTableProps {
 export function ComplaintsTable({ complaints: initialComplaints }: ComplaintsTableProps) {
   const { complaints, updateComplaint } = useComplaints();
   const [complaintToAssess, setComplaintToAssess] = useState<Complaint | null>(null);
-  const [filter, setFilter] = useState<{ text: string; status: ComplaintStatus | 'All' }>({ text: '', status: 'All' });
+  const [filter, setFilter] = useState<{ text: string; status: ComplaintStatus | 'Semua' }>({ text: '', status: 'Semua' });
 
   const handleStatusChange = (id: string, status: ComplaintStatus) => {
     updateComplaint(id, { status });
@@ -42,17 +43,17 @@ export function ComplaintsTable({ complaints: initialComplaints }: ComplaintsTab
   
   const getStatusVariant = (status: Complaint['status']) => {
     switch (status) {
-      case 'Submitted': return 'secondary';
-      case 'In Progress': return 'default';
-      case 'Completed': return 'outline';
-      case 'Rejected': return 'destructive';
+      case 'Terkirim': return 'secondary';
+      case 'Sedang Diproses': return 'default';
+      case 'Selesai': return 'outline';
+      case 'Ditolak': return 'destructive';
       default: return 'secondary';
     }
   };
 
   const filteredComplaints = useMemo(() => {
     return complaints
-      .filter(c => filter.status === 'All' || c.status === filter.status)
+      .filter(c => filter.status === 'Semua' || c.status === filter.status)
       .filter(c => c.text.toLowerCase().includes(filter.text.toLowerCase()) || c.id.toLowerCase().includes(filter.text.toLowerCase()))
       .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
   }, [complaints, filter]);
@@ -61,10 +62,10 @@ export function ComplaintsTable({ complaints: initialComplaints }: ComplaintsTab
     <Card>
       <CardHeader>
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-            <CardTitle>Incoming Complaints</CardTitle>
+            <CardTitle>Keluhan Masuk</CardTitle>
             <div className="flex gap-2 w-full md:w-auto">
                 <Input 
-                    placeholder="Filter by text or ID..."
+                    placeholder="Saring berdasarkan teks atau ID..."
                     value={filter.text}
                     onChange={(e) => setFilter(prev => ({...prev, text: e.target.value}))}
                     className="max-w-sm"
@@ -77,11 +78,11 @@ export function ComplaintsTable({ complaints: initialComplaints }: ComplaintsTab
                         </Button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align="end">
-                        <DropdownMenuItem onClick={() => setFilter(prev => ({...prev, status: 'All'}))}>All</DropdownMenuItem>
-                        <DropdownMenuItem onClick={() => setFilter(prev => ({...prev, status: 'Submitted'}))}>Submitted</DropdownMenuItem>
-                        <DropdownMenuItem onClick={() => setFilter(prev => ({...prev, status: 'In Progress'}))}>In Progress</DropdownMenuItem>
-                        <DropdownMenuItem onClick={() => setFilter(prev => ({...prev, status: 'Completed'}))}>Completed</DropdownMenuItem>
-                        <DropdownMenuItem onClick={() => setFilter(prev => ({...prev, status: 'Rejected'}))}>Rejected</DropdownMenuItem>
+                        <DropdownMenuItem onClick={() => setFilter(prev => ({...prev, status: 'Semua'}))}>Semua</DropdownMenuItem>
+                        <DropdownMenuItem onClick={() => setFilter(prev => ({...prev, status: 'Terkirim'}))}>Terkirim</DropdownMenuItem>
+                        <DropdownMenuItem onClick={() => setFilter(prev => ({...prev, status: 'Sedang Diproses'}))}>Sedang Diproses</DropdownMenuItem>
+                        <DropdownMenuItem onClick={() => setFilter(prev => ({...prev, status: 'Selesai'}))}>Selesai</DropdownMenuItem>
+                        <DropdownMenuItem onClick={() => setFilter(prev => ({...prev, status: 'Ditolak'}))}>Ditolak</DropdownMenuItem>
                     </DropdownMenuContent>
                 </DropdownMenu>
             </div>
@@ -92,12 +93,12 @@ export function ComplaintsTable({ complaints: initialComplaints }: ComplaintsTab
           <Table>
             <TableHeader>
               <TableRow>
-                <TableHead>Tracking ID</TableHead>
-                <TableHead>Category</TableHead>
-                <TableHead>Complaint</TableHead>
-                <TableHead>Submitted</TableHead>
+                <TableHead>ID Pelacakan</TableHead>
+                <TableHead>Kategori</TableHead>
+                <TableHead>Keluhan</TableHead>
+                <TableHead>Dikirim</TableHead>
                 <TableHead>Status</TableHead>
-                <TableHead className="text-right">Actions</TableHead>
+                <TableHead className="text-right">Aksi</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -111,7 +112,7 @@ export function ComplaintsTable({ complaints: initialComplaints }: ComplaintsTab
                         {complaint.text}
                       </div>
                     </TableCell>
-                    <TableCell>{format(new Date(complaint.createdAt), 'dd/MM/yyyy')}</TableCell>
+                    <TableCell>{format(new Date(complaint.createdAt), 'dd/MM/yyyy', { locale: id })}</TableCell>
                     <TableCell>
                       <Badge variant={getStatusVariant(complaint.status)}>{complaint.status}</Badge>
                     </TableCell>
@@ -119,20 +120,20 @@ export function ComplaintsTable({ complaints: initialComplaints }: ComplaintsTab
                       <DropdownMenu>
                         <DropdownMenuTrigger asChild>
                           <Button variant="ghost" className="h-8 w-8 p-0">
-                            <span className="sr-only">Open menu</span>
+                            <span className="sr-only">Buka menu</span>
                             <MoreHorizontal className="h-4 w-4" />
                           </Button>
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align="end">
-                          <DropdownMenuLabel>Actions</DropdownMenuLabel>
+                          <DropdownMenuLabel>Aksi</DropdownMenuLabel>
                           <DropdownMenuItem onClick={() => setComplaintToAssess(complaint)}>
                             <Bot className="mr-2 h-4 w-4" />
-                            Assess with AI
+                            Nilai dengan AI
                           </DropdownMenuItem>
                           <DropdownMenuSeparator />
-                          <DropdownMenuItem onClick={() => handleStatusChange(complaint.id, 'In Progress')}>Mark as In Progress</DropdownMenuItem>
-                          <DropdownMenuItem onClick={() => handleStatusChange(complaint.id, 'Completed')}>Mark as Completed</DropdownMenuItem>
-                          <DropdownMenuItem onClick={() => handleStatusChange(complaint.id, 'Rejected')}>Mark as Rejected</DropdownMenuItem>
+                          <DropdownMenuItem onClick={() => handleStatusChange(complaint.id, 'Sedang Diproses')}>Tandai Sedang Diproses</DropdownMenuItem>
+                          <DropdownMenuItem onClick={() => handleStatusChange(complaint.id, 'Selesai')}>Tandai Selesai</DropdownMenuItem>
+                          <DropdownMenuItem onClick={() => handleStatusChange(complaint.id, 'Ditolak')}>Tandai Ditolak</DropdownMenuItem>
                         </DropdownMenuContent>
                       </DropdownMenu>
                     </TableCell>
@@ -141,7 +142,7 @@ export function ComplaintsTable({ complaints: initialComplaints }: ComplaintsTab
               ) : (
                 <TableRow>
                   <TableCell colSpan={6} className="h-24 text-center">
-                    No complaints found.
+                    Tidak ada keluhan ditemukan.
                   </TableCell>
                 </TableRow>
               )}

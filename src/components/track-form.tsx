@@ -20,9 +20,10 @@ import { Complaint } from '@/lib/types';
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 import { Terminal } from 'lucide-react';
 import { format } from 'date-fns';
+import { id } from 'date-fns/locale';
 
 const formSchema = z.object({
-  trackingId: z.string().min(1, { message: "Tracking ID is required." }),
+  trackingId: z.string().min(1, { message: "ID pelacakan diperlukan." }),
 });
 
 export function TrackForm() {
@@ -43,10 +44,10 @@ export function TrackForm() {
   
   const getStatusVariant = (status: Complaint['status']) => {
     switch (status) {
-      case 'Submitted': return 'secondary';
-      case 'In Progress': return 'default';
-      case 'Completed': return 'outline';
-      case 'Rejected': return 'destructive';
+      case 'Terkirim': return 'secondary';
+      case 'Sedang Diproses': return 'default';
+      case 'Selesai': return 'outline';
+      case 'Ditolak': return 'destructive';
       default: return 'secondary';
     }
   }
@@ -62,13 +63,13 @@ export function TrackForm() {
               render={({ field }) => (
                 <FormItem className="flex-grow">
                   <FormControl>
-                    <Input placeholder="Enter your tracking ID (e.g., AS-12345-ABCDE)" {...field} />
+                    <Input placeholder="Masukkan ID pelacakanmu (misal, AS-12345-ABCDE)" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
             />
-            <Button type="submit" variant="outline">Track</Button>
+            <Button type="submit" variant="outline">Lacak</Button>
           </form>
         </Form>
         
@@ -77,16 +78,16 @@ export function TrackForm() {
             {searchedComplaint === null ? (
               <Alert variant="destructive">
                 <Terminal className="h-4 w-4" />
-                <AlertTitle>Not Found</AlertTitle>
+                <AlertTitle>Tidak Ditemukan</AlertTitle>
                 <AlertDescription>
-                  No complaint found with that ID. Please check the ID and try again.
+                  Tidak ada keluhan yang ditemukan dengan ID tersebut. Harap periksa kembali ID dan coba lagi.
                 </AlertDescription>
               </Alert>
             ) : (
               <Card>
                 <CardHeader>
                   <div className="flex justify-between items-center">
-                    <CardTitle>Complaint Details</CardTitle>
+                    <CardTitle>Detail Keluhan</CardTitle>
                     <Badge variant={getStatusVariant(searchedComplaint.status)}>{searchedComplaint.status}</Badge>
                   </div>
                   <CardDescription>
@@ -95,15 +96,15 @@ export function TrackForm() {
                 </CardHeader>
                 <CardContent className="space-y-4">
                   <div>
-                    <h4 className="font-semibold">Category</h4>
+                    <h4 className="font-semibold">Kategori</h4>
                     <p className="text-muted-foreground">{searchedComplaint.category}</p>
                   </div>
                    <div>
-                    <h4 className="font-semibold">Submitted On</h4>
-                    <p className="text-muted-foreground">{format(new Date(searchedComplaint.createdAt), 'MMMM d, yyyy')}</p>
+                    <h4 className="font-semibold">Dikirim Pada</h4>
+                    <p className="text-muted-foreground">{format(new Date(searchedComplaint.createdAt), 'd MMMM yyyy', { locale: id })}</p>
                   </div>
                   <div>
-                    <h4 className="font-semibold">Complaint</h4>
+                    <h4 className="font-semibold">Keluhan</h4>
                     <p className="text-muted-foreground bg-secondary p-3 rounded-md">{searchedComplaint.text}</p>
                   </div>
                 </CardContent>

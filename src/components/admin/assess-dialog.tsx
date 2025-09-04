@@ -37,11 +37,11 @@ export function AssessDialog({ complaint, isOpen, onClose, onStatusUpdate }: Ass
         });
         setAssessment(result);
       } catch (error) {
-        console.error("AI assessment failed", error);
+        console.error("Penilaian AI gagal", error);
         toast({
           variant: 'destructive',
-          title: 'Assessment Failed',
-          description: 'The AI assessment could not be completed. Please try again.',
+          title: 'Penilaian Gagal',
+          description: 'Penilaian AI tidak dapat diselesaikan. Silakan coba lagi.',
         });
       }
     });
@@ -63,29 +63,29 @@ export function AssessDialog({ complaint, isOpen, onClose, onStatusUpdate }: Ass
     <Dialog open={isOpen} onOpenChange={handleClose}>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>AI Complaint Assessment</DialogTitle>
+          <DialogTitle>Penilaian Keluhan AI</DialogTitle>
           <DialogDescription>
-            Use AI to get a recommendation for this complaint's status based on its content.
+            Gunakan AI untuk mendapatkan rekomendasi status keluhan ini berdasarkan isinya.
           </DialogDescription>
         </DialogHeader>
         <div className="my-4 space-y-4">
           {!assessment && (
             <Button onClick={handleAssess} disabled={isAssessing} className="w-full">
               {isAssessing ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Wand2 className="mr-2 h-4 w-4" />}
-              {isAssessing ? 'Assessing...' : 'Start AI Assessment'}
+              {isAssessing ? 'Menilai...' : 'Mulai Penilaian AI'}
             </Button>
           )}
 
           {assessment && (
             <Alert>
               <Wand2 className="h-4 w-4" />
-              <AlertTitle>AI Recommendation</AlertTitle>
+              <AlertTitle>Rekomendasi AI</AlertTitle>
               <AlertDescription>
                 <p className="font-semibold">
-                  Suggested Status: <span className="font-bold text-primary">{assessment.newStatus}</span>
+                  Status yang Disarankan: <span className="font-bold text-primary">{assessment.newStatus}</span>
                 </p>
                 <p className="mt-2 text-sm text-muted-foreground">
-                  <strong>Reasoning:</strong> {assessment.reasoning}
+                  <strong>Alasan:</strong> {assessment.reasoning}
                 </p>
               </AlertDescription>
             </Alert>
@@ -93,10 +93,10 @@ export function AssessDialog({ complaint, isOpen, onClose, onStatusUpdate }: Ass
         </div>
         <DialogFooter>
           <Button variant="outline" onClick={handleClose}>
-            Cancel
+            Batal
           </Button>
           <Button onClick={handleConfirm} disabled={!assessment || isAssessing} className="bg-accent hover:bg-accent/90 text-accent-foreground">
-            Update to "{assessment?.newStatus || '...'}"
+            Perbarui menjadi "{assessment?.newStatus || '...'}"
           </Button>
         </DialogFooter>
       </DialogContent>

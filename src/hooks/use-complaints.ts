@@ -16,7 +16,7 @@ export function useComplaints() {
         setComplaints(JSON.parse(storedComplaints));
       }
     } catch (error) {
-      console.error("Failed to load complaints from localStorage", error);
+      console.error("Gagal memuat keluhan dari localStorage", error);
     } finally {
       setIsLoading(false);
     }
@@ -27,7 +27,7 @@ export function useComplaints() {
       setComplaints(updatedComplaints);
       localStorage.setItem(COMPLAINTS_STORAGE_KEY, JSON.stringify(updatedComplaints));
     } catch (error) {
-      console.error("Failed to save complaints to localStorage", error);
+      console.error("Gagal menyimpan keluhan ke localStorage", error);
     }
   }, []);
 
@@ -36,7 +36,7 @@ export function useComplaints() {
     const complaintToAdd: Complaint = {
       ...newComplaint,
       id,
-      status: 'Submitted',
+      status: 'Terkirim',
       createdAt: new Date().toISOString(),
     };
     saveComplaints([complaintToAdd, ...complaints]);

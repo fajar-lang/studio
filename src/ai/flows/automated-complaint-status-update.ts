@@ -22,7 +22,7 @@ const AutomatedComplaintStatusUpdateOutputSchema = z.object({
   newStatus: z
     .string()
     .describe(
-      "The new status of the complaint, automatically assessed by the AI ('Submitted', 'In Progress', 'Completed', 'Rejected')."
+      "The new status of the complaint, automatically assessed by the AI ('Terkirim', 'Sedang Diproses', 'Selesai', 'Ditolak')."
     ),
   reasoning: z.string().describe('The AI reasoning for the status update.'),
 });
@@ -40,20 +40,20 @@ const prompt = ai.definePrompt({
   name: 'automatedComplaintStatusUpdatePrompt',
   input: {schema: AutomatedComplaintStatusUpdateInputSchema},
   output: {schema: AutomatedComplaintStatusUpdateOutputSchema},
-  prompt: `You are an AI assistant helping to manage student complaints.
+  prompt: `Anda adalah asisten AI yang membantu mengelola keluhan siswa.
 
-You are provided with the text of a student complaint and its current status.
-Based on the complaint text, you must determine if the complaint is likely to be valid or not.
-If the complaint seems genuine, update the status to 'In Progress'.
-If the complaint appears fake, update the status to 'Rejected'.
-If the complaint is already 'In Progress' or 'Completed', do not change the status unless there is a compelling reason to reject it.
+Anda diberikan teks keluhan siswa dan statusnya saat ini.
+Berdasarkan teks keluhan, Anda harus menentukan apakah keluhan tersebut kemungkinan valid atau tidak.
+Jika keluhan tampak asli, perbarui status menjadi 'Sedang Diproses'.
+Jika keluhan tampak palsu, perbarui status menjadi 'Ditolak'.
+Jika keluhan sudah 'Sedang Diproses' atau 'Selesai', jangan ubah status kecuali ada alasan kuat untuk menolaknya.
 
-Complaint Text: {{{complaintText}}}
-Current Status: {{{currentStatus}}}
+Teks Keluhan: {{{complaintText}}}
+Status Saat Ini: {{{currentStatus}}}
 
-Provide a new status and reasoning for the status update.
-Be brief and to the point.
-Consider that the possible values are 'Submitted', 'In Progress', 'Completed', 'Rejected'.
+Berikan status baru dan alasan untuk pembaruan status tersebut.
+Jadilah singkat dan langsung ke intinya.
+Perhatikan bahwa nilai yang mungkin adalah 'Terkirim', 'Sedang Diproses', 'Selesai', 'Ditolak'.
 `,
 });
 

@@ -6,10 +6,10 @@ export default function TrackPage() {
       <section className="flex flex-col items-center text-center">
         <div className="max-w-2xl">
           <h1 className="text-3xl md:text-5xl font-bold tracking-tighter mb-4 font-headline">
-            Track Your Complaint
+            Lacak Keluhanmu
           </h1>
           <p className="text-lg md:text-xl text-muted-foreground mb-8">
-            Enter your unique tracking ID to see the current status of your submission.
+            Masukkan ID pelacakan unikmu untuk melihat status kirimanmu saat ini.
           </p>
           <TrackForm />
         </div>

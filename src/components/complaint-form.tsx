@@ -35,13 +35,13 @@ import {
 } from "@/components/ui/alert-dialog";
 
 const formSchema = z.object({
-  category: z.enum(['Facilities', 'Teaching', 'Canteen', 'Bullying'], {
-    required_error: "Please select a category.",
+  category: z.enum(['Fasilitas', 'Pengajaran', 'Kantin', 'Perundungan'], {
+    required_error: "Silakan pilih kategori.",
   }),
   text: z.string().min(20, {
-    message: "Complaint must be at least 20 characters.",
+    message: "Keluhan harus minimal 20 karakter.",
   }).max(2000, {
-    message: "Complaint must not exceed 2000 characters."
+    message: "Keluhan tidak boleh melebihi 2000 karakter."
   }),
 });
 
@@ -61,14 +61,17 @@ export function ComplaintForm() {
   function onSubmit(values: z.infer<typeof formSchema>) {
     startTransition(() => {
       try {
-        const newId = addComplaint(values);
+        const newId = addComplaint({
+            ...values,
+            category: values.category as 'Facilities' | 'Teaching' | 'Canteen' | 'Bullying'
+        });
         setSubmittedId(newId);
         form.reset();
       } catch (error) {
         toast({
           variant: "destructive",
-          title: "Submission Failed",
-          description: "Could not save your complaint. Please try again.",
+          title: "Pengiriman Gagal",
+          description: "Tidak dapat menyimpan keluhanmu. Silakan coba lagi.",
         });
       }
     });
@@ -77,7 +80,7 @@ export function ComplaintForm() {
   const copyToClipboard = () => {
     if (submittedId) {
       navigator.clipboard.writeText(submittedId);
-      toast({ title: "Copied!", description: "Tracking ID copied to clipboard." });
+      toast({ title: "Tersalin!", description: "ID pelacakan disalin ke clipboard." });
     }
   };
 
@@ -90,18 +93,18 @@ export function ComplaintForm() {
             name="category"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Category</FormLabel>
+                <FormLabel>Kategori</FormLabel>
                 <Select onValueChange={field.onChange} defaultValue={field.value}>
                   <FormControl>
                     <SelectTrigger>
-                      <SelectValue placeholder="Select a complaint category" />
+                      <SelectValue placeholder="Pilih kategori keluhan" />
                     </SelectTrigger>
                   </FormControl>
                   <SelectContent>
-                    <SelectItem value="Facilities">Facilities</SelectItem>
-                    <SelectItem value="Teaching">Teaching</SelectItem>
-                    <SelectItem value="Canteen">Canteen</SelectItem>
-                    <SelectItem value="Bullying">Bullying</SelectItem>
+                    <SelectItem value="Fasilitas">Fasilitas</SelectItem>
+                    <SelectItem value="Pengajaran">Pengajaran</SelectItem>
+                    <SelectItem value="Kantin">Kantin</SelectItem>
+                    <SelectItem value="Perundungan">Perundungan</SelectItem>
                   </SelectContent>
                 </Select>
                 <FormMessage />
@@ -113,10 +116,10 @@ export function ComplaintForm() {
             name="text"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Your Complaint</FormLabel>
+                <FormLabel>Keluhanmu</FormLabel>
                 <FormControl>
                   <Textarea
-                    placeholder="Please describe your issue in detail. Your submission is anonymous."
+                    placeholder="Harap jelaskan masalahmu secara rinci. Kirimanmu anonim."
                     {...field}
                     rows={6}
                   />
@@ -126,7 +129,7 @@ export function ComplaintForm() {
             )}
           />
           <Button type="submit" disabled={isPending} className="w-full bg-accent hover:bg-accent/90 text-accent-foreground">
-            {isPending ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : "Submit Anonymously"}
+            {isPending ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : "Kirim Secara Anonim"}
           </Button>
         </form>
       </Form>
@@ -134,9 +137,9 @@ export function ComplaintForm() {
       <AlertDialog open={!!submittedId} onOpenChange={() => setSubmittedId(null)}>
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>Complaint Submitted Successfully!</AlertDialogTitle>
+            <AlertDialogTitle>Keluhan Berhasil Dikirim!</AlertDialogTitle>
             <AlertDialogDescription>
-              Please save this tracking ID. You'll need it to check the status of your complaint.
+              Harap simpan ID pelacakan ini. Kamu akan memerlukannya untuk memeriksa status keluhanmu.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <div className="my-4 p-4 bg-secondary rounded-md flex items-center justify-between">
@@ -146,7 +149,7 @@ export function ComplaintForm() {
             </Button>
           </div>
           <AlertDialogFooter>
-            <AlertDialogAction onClick={() => setSubmittedId(null)}>Close</AlertDialogAction>
+            <AlertDialogAction onClick={() => setSubmittedId(null)}>Tutup</AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>

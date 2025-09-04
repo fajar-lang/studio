@@ -1,6 +1,6 @@
-export type ComplaintCategory = 'Facilities' | 'Teaching' | 'Canteen' | 'Bullying';
+export type ComplaintCategory = 'Fasilitas' | 'Pengajaran' | 'Kantin' | 'Perundungan';
 
-export type ComplaintStatus = 'Submitted' | 'In Progress' | 'Completed' | 'Rejected';
+export type ComplaintStatus = 'Terkirim' | 'Sedang Diproses' | 'Selesai' | 'Ditolak';
 
 export interface Complaint {
   id: string;

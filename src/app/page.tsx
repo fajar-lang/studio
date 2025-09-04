@@ -10,13 +10,13 @@ export default function Home() {
             Aspirasi Siswa
           </h1>
           <p className="text-lg md:text-xl text-muted-foreground mb-8">
-            Your anonymous platform to voice concerns and contribute to a better school environment.
+            Platform anonim untuk kamu menyuarakan keprihatinan dan berkontribusi untuk lingkungan sekolah yang lebih baik.
           </p>
         </div>
         <Card className="w-full max-w-2xl shadow-lg">
           <CardHeader>
-            <CardTitle>Submit a Complaint</CardTitle>
-            <CardDescription>All submissions are completely anonymous. Please describe your concern clearly.</CardDescription>
+            <CardTitle>Kirim Keluhan</CardTitle>
+            <CardDescription>Semua kiriman sepenuhnya anonim. Harap jelaskan keluhanmu dengan jelas.</CardDescription>
           </CardHeader>
           <CardContent>
             <ComplaintForm />

@@ -25,8 +25,8 @@ export function AdminDashboard() {
   return (
     <div className="flex flex-col gap-8">
       <header>
-        <h1 className="text-3xl font-bold tracking-tight font-headline">Admin Dashboard</h1>
-        <p className="text-muted-foreground">Manage and respond to student complaints.</p>
+        <h1 className="text-3xl font-bold tracking-tight font-headline">Dasbor Admin</h1>
+        <p className="text-muted-foreground">Kelola dan tanggapi keluhan siswa.</p>
       </header>
       <StatsCards complaints={complaints} />
       <ComplaintsTable complaints={complaints} />

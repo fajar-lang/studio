@@ -13,9 +13,9 @@ export function StatsCards({ complaints }: StatsCardsProps) {
   const stats = useMemo(() => {
     return {
       total: complaints.length,
-      inProgress: complaints.filter(c => c.status === 'In Progress').length,
-      completed: complaints.filter(c => c.status === 'Completed').length,
-      rejected: complaints.filter(c => c.status === 'Rejected').length,
+      inProgress: complaints.filter(c => c.status === 'Sedang Diproses').length,
+      completed: complaints.filter(c => c.status === 'Selesai').length,
+      rejected: complaints.filter(c => c.status === 'Ditolak').length,
     };
   }, [complaints]);
 
@@ -23,7 +23,7 @@ export function StatsCards({ complaints }: StatsCardsProps) {
     <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
       <Card>
         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-          <CardTitle className="text-sm font-medium">Total Complaints</CardTitle>
+          <CardTitle className="text-sm font-medium">Total Keluhan</CardTitle>
           <MessageSquare className="h-4 w-4 text-muted-foreground" />
         </CardHeader>
         <CardContent>
@@ -32,7 +32,7 @@ export function StatsCards({ complaints }: StatsCardsProps) {
       </Card>
       <Card>
         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-          <CardTitle className="text-sm font-medium">In Progress</CardTitle>
+          <CardTitle className="text-sm font-medium">Sedang Diproses</CardTitle>
           <Hourglass className="h-4 w-4 text-muted-foreground" />
         </CardHeader>
         <CardContent>
@@ -41,7 +41,7 @@ export function StatsCards({ complaints }: StatsCardsProps) {
       </Card>
       <Card>
         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-          <CardTitle className="text-sm font-medium">Completed</CardTitle>
+          <CardTitle className="text-sm font-medium">Selesai</CardTitle>
           <CheckCircle className="h-4 w-4 text-muted-foreground" />
         </CardHeader>
         <CardContent>
@@ -50,7 +50,7 @@ export function StatsCards({ complaints }: StatsCardsProps) {
       </Card>
        <Card>
         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-          <CardTitle className="text-sm font-medium">Rejected</CardTitle>
+          <CardTitle className="text-sm font-medium">Ditolak</CardTitle>
           <XCircle className="h-4 w-4 text-muted-foreground" />
         </CardHeader>
         <CardContent>

@@ -9,8 +9,8 @@ export function Header() {
   const pathname = usePathname();
 
   const navLinks = [
-    { href: '/', label: 'Submit' },
-    { href: '/track', label: 'Track Complaint' },
+    { href: '/', label: 'Kirim' },
+    { href: '/track', label: 'Lacak Keluhan' },
     { href: '/admin', label: 'Admin' },
   ];
 
