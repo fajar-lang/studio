@@ -1,7 +1,6 @@
 "use client";
 
 import { useState, useMemo } from 'react';
-import * as XLSX from 'xlsx';
 import {
   Table,
   TableBody,
@@ -40,6 +39,22 @@ import {
   AlertDialogTrigger,
 } from '@/components/ui/alert-dialog';
 
+const exportToExcel = async (complaints: Complaint[]) => {
+  const XLSX = await import('xlsx');
+  const dataToExport = complaints.map(c => ({
+    'ID Pelacakan': c.id,
+    'Kategori': c.category,
+    'Keluhan': c.text,
+    'Dikirim': format(new Date(c.createdAt), 'dd MMMM yyyy, HH:mm', { locale: id }),
+    'Status': c.status,
+  }));
+  const worksheet = XLSX.utils.json_to_sheet(dataToExport);
+  const workbook = XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(workbook, worksheet, 'Keluhan');
+  XLSX.writeFile(workbook, `data-keluhan-${new Date().toISOString().split('T')[0]}.xlsx`);
+};
+
+
 export function ComplaintsTable() {
   const { complaints, updateComplaint, deleteComplaint } = useComplaints();
   const [complaintToAssess, setComplaintToAssess] = useState<Complaint | null>(null);
@@ -66,19 +81,9 @@ export function ComplaintsTable() {
       .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
   }, [complaints, filter]);
   
-  const exportToExcel = () => {
-    const dataToExport = filteredComplaints.map(c => ({
-      'ID Pelacakan': c.id,
-      'Kategori': c.category,
-      'Keluhan': c.text,
-      'Dikirim': format(new Date(c.createdAt), 'dd MMMM yyyy, HH:mm', { locale: id }),
-      'Status': c.status,
-    }));
-    const worksheet = XLSX.utils.json_to_sheet(dataToExport);
-    const workbook = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(workbook, worksheet, 'Keluhan');
-    XLSX.writeFile(workbook, `data-keluhan-${new Date().toISOString().split('T')[0]}.xlsx`);
-  };
+  const handleExport = () => {
+    exportToExcel(filteredComplaints);
+  }
 
   return (
     <Card>
@@ -107,7 +112,7 @@ export function ComplaintsTable() {
                         <DropdownMenuItem onClick={() => setFilter(prev => ({...prev, status: 'Ditolak'}))}>Ditolak</DropdownMenuItem>
                     </DropdownMenuContent>
                 </DropdownMenu>
-                <Button variant="outline" onClick={exportToExcel}>
+                <Button variant="outline" onClick={handleExport}>
                     <FileDown className="mr-2 h-4 w-4" />
                     Ekspor Excel
                 </Button>
