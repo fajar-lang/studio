@@ -16,20 +16,16 @@ import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { useToast } from "@/hooks/use-toast";
 import { useAdmins } from '@/hooks/use-admins';
-import { LogIn } from 'lucide-react';
+import { UserPlus } from 'lucide-react';
 
 const formSchema = z.object({
-  username: z.string().min(1, { message: "Nama pengguna diperlukan." }),
-  password: z.string().min(1, { message: "Kata sandi diperlukan." }),
+  username: z.string().min(4, { message: "Nama pengguna minimal 4 karakter." }),
+  password: z.string().min(6, { message: "Kata sandi minimal 6 karakter." }),
 });
 
-interface AdminLoginProps {
-  onLoginSuccess: () => void;
-}
-
-export function AdminLogin({ onLoginSuccess }: AdminLoginProps) {
+export function AddAdminForm() {
   const { toast } = useToast();
-  const { login } = useAdmins();
+  const { addAdmin } = useAdmins();
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -39,30 +35,30 @@ export function AdminLogin({ onLoginSuccess }: AdminLoginProps) {
     },
   });
 
-  async function onSubmit(values: z.infer<typeof formSchema>) {
-    const admin = await login(values.username, values.password);
-
-    if (admin) {
+  function onSubmit(values: z.infer<typeof formSchema>) {
+    const result = addAdmin(values.username, values.password);
+    if (result.success) {
       toast({
-        title: "Login Berhasil",
-        description: `Selamat datang, ${admin.username}!`,
+        title: "Admin Ditambahkan",
+        description: `Pengguna '${values.username}' telah berhasil dibuat.`,
       });
-      onLoginSuccess();
+      form.reset();
+      // Optionally, refresh the list of admins by calling a function from the hook
+      window.location.reload(); // Simple way to refresh state across components
     } else {
       toast({
         variant: "destructive",
-        title: "Login Gagal",
-        description: "Nama pengguna atau kata sandi salah.",
+        title: "Gagal Menambahkan Admin",
+        description: result.message,
       });
     }
   }
 
   return (
-    <div className="flex justify-center items-center py-16">
-      <Card className="w-full max-w-md shadow-lg">
-        <CardHeader className="text-center">
-          <CardTitle>Login Admin</CardTitle>
-          <CardDescription>Silakan masuk untuk mengakses dasbor.</CardDescription>
+      <Card className="h-fit">
+        <CardHeader>
+          <CardTitle>Tambah Admin Baru</CardTitle>
+          <CardDescription>Buat akun admin baru untuk mengelola keluhan.</CardDescription>
         </CardHeader>
         <CardContent>
           <Form {...form}>
@@ -72,9 +68,9 @@ export function AdminLogin({ onLoginSuccess }: AdminLoginProps) {
                 name="username"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Nama Pengguna</FormLabel>
+                    <FormLabel>Nama Pengguna Baru</FormLabel>
                     <FormControl>
-                      <Input placeholder="Masukkan nama pengguna" {...field} />
+                      <Input placeholder="cth: adminsekolah" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -85,7 +81,7 @@ export function AdminLogin({ onLoginSuccess }: AdminLoginProps) {
                 name="password"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Kata Sandi</FormLabel>
+                    <FormLabel>Kata Sandi Baru</FormLabel>
                     <FormControl>
                       <Input type="password" placeholder="••••••••" {...field} />
                     </FormControl>
@@ -93,17 +89,13 @@ export function AdminLogin({ onLoginSuccess }: AdminLoginProps) {
                   </FormItem>
                 )}
               />
-              <Button type="submit" className="w-full" disabled={form.formState.isSubmitting}>
-                 {form.formState.isSubmitting ? 'Memproses...' : <>
-                    <LogIn className="mr-2 h-4 w-4" />
-                    Masuk
-                </>
-                }
+              <Button type="submit" className="w-full">
+                <UserPlus className="mr-2 h-4 w-4" />
+                Tambah Admin
               </Button>
             </form>
           </Form>
         </CardContent>
       </Card>
-    </div>
   );
 }

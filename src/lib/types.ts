@@ -9,3 +9,13 @@ export interface Complaint {
   status: ComplaintStatus;
   createdAt: string;
 }
+
+export type AdminRole = 'superadmin' | 'admin';
+
+export interface Admin {
+  id: string;
+  username: string;
+  password?: string; // Password is not always sent to the client
+  role: AdminRole;
+  createdAt: string;
+}
