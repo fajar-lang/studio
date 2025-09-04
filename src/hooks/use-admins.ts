@@ -19,16 +19,18 @@ const simpleHash = (password: string) => {
 };
 
 export function useAdmins() {
-  const [admins, setAdmins] = useState<Admin[]>([]);
+  const [admins, setAdmins] = useState<Omit<Admin, 'password'>[]>([]);
   const [loggedInAdmin, setLoggedInAdmin] = useState<Admin | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
-  // Initialize admins and check login status from localStorage
-  useEffect(() => {
+  // Function to load admins from localStorage
+  const loadAdmins = () => {
     try {
       const storedAdmins = localStorage.getItem(ADMINS_STORAGE_KEY);
       if (storedAdmins) {
-        setAdmins(JSON.parse(storedAdmins));
+        const parsedAdmins: Admin[] = JSON.parse(storedAdmins);
+        setAdmins(parsedAdmins.map(({ password, ...rest }) => rest));
+        return parsedAdmins;
       } else {
         // If no admins exist, create the default superadmin
         const superAdmin: Admin = {
@@ -39,28 +41,38 @@ export function useAdmins() {
           createdAt: new Date().toISOString(),
         };
         localStorage.setItem(ADMINS_STORAGE_KEY, JSON.stringify([superAdmin]));
-        setAdmins([superAdmin]);
+        setAdmins([superAdmin].map(({ password, ...rest }) => rest));
+        return [superAdmin];
       }
+    } catch (error) {
+      console.error("Gagal memuat data admin dari storage", error);
+      return [];
+    }
+  };
 
+  // Initialize admins and check login status from localStorage
+  useEffect(() => {
+    loadAdmins();
+    try {
       const loggedInUserJson = sessionStorage.getItem(LOGGED_IN_ADMIN_KEY);
       if (loggedInUserJson) {
         setLoggedInAdmin(JSON.parse(loggedInUserJson));
       }
     } catch (error) {
-      console.error("Gagal memuat data admin dari storage", error);
+       console.error("Gagal memuat data admin yang masuk dari storage", error);
     } finally {
       setIsLoading(false);
     }
   }, []);
   
-  const saveAdmins = useCallback((updatedAdmins: Admin[]) => {
+  const saveAdminsToStorage = (updatedAdmins: Admin[]) => {
     try {
-      setAdmins(updatedAdmins);
       localStorage.setItem(ADMINS_STORAGE_KEY, JSON.stringify(updatedAdmins));
+      setAdmins(updatedAdmins.map(({ password, ...rest }) => rest));
     } catch (error) {
       console.error("Gagal menyimpan admin ke localStorage", error);
     }
-  }, []);
+  };
 
   const addAdmin = useCallback((username: string, password: string): {success: boolean, message: string} => {
     const currentAdmins = JSON.parse(localStorage.getItem(ADMINS_STORAGE_KEY) || '[]');
@@ -76,9 +88,9 @@ export function useAdmins() {
       role: 'admin',
       createdAt: new Date().toISOString(),
     };
-    saveAdmins([...currentAdmins, newAdmin]);
+    saveAdminsToStorage([...currentAdmins, newAdmin]);
     return { success: true, message: "Admin berhasil ditambahkan." };
-  }, [saveAdmins]);
+  }, []);
 
 
   const login = useCallback(async (username: string, password_raw: string): Promise<Admin | null> => {
@@ -103,12 +115,6 @@ export function useAdmins() {
     sessionStorage.removeItem(LOGGED_IN_ADMIN_KEY);
     setLoggedInAdmin(null);
   }, []);
-  
-  const getAdmins = useCallback((): Omit<Admin, 'password'>[] => {
-     const currentAdmins: Admin[] = JSON.parse(localStorage.getItem(ADMINS_STORAGE_KEY) || '[]');
-     return currentAdmins.map(({ password, ...rest }) => rest);
-  }, []);
 
-
-  return { admins: getAdmins(), loggedInAdmin, isLoading, addAdmin, login, logout };
+  return { admins, loggedInAdmin, isLoading, addAdmin, login, logout };
 }

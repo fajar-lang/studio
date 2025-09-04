@@ -27,8 +27,8 @@ export function AdminsList() {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {admins.length > 0 ? (
-                admins.map((admin) => (
+              {admins.length > 1 ? (
+                admins.filter(a => a.role !== 'superadmin').map((admin) => (
                   <TableRow key={admin.id}>
                     <TableCell className="font-medium">{admin.username}</TableCell>
                     <TableCell>
