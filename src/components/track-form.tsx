@@ -18,7 +18,7 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/com
 import { Badge } from '@/components/ui/badge';
 import { Complaint } from '@/lib/types';
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
-import { Terminal } from 'lucide-react';
+import { Terminal, Search } from 'lucide-react';
 import { format } from 'date-fns';
 import { id } from 'date-fns/locale';
 
@@ -53,66 +53,71 @@ export function TrackForm() {
   }
 
   return (
-    <Card className="w-full shadow-lg">
-      <CardContent className="pt-6">
-        <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="flex items-start gap-2">
-            <FormField
-              control={form.control}
-              name="trackingId"
-              render={({ field }) => (
-                <FormItem className="flex-grow">
-                  <FormControl>
-                    <Input placeholder="Masukkan ID pelacakanmu (misal, AS-12345-ABCDE)" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <Button type="submit" variant="outline">Lacak</Button>
-          </form>
-        </Form>
+    <>
+      <Card className="w-full shadow-xl bg-white/80 backdrop-blur-sm">
+        <CardContent className="pt-6">
+          <Form {...form}>
+            <form onSubmit={form.handleSubmit(onSubmit)} className="flex items-start gap-2">
+              <FormField
+                control={form.control}
+                name="trackingId"
+                render={({ field }) => (
+                  <FormItem className="flex-grow">
+                    <FormControl>
+                      <Input placeholder="Masukkan ID pelacakanmu (misal, AS-12345-ABCDE)" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <Button type="submit">
+                <Search className="mr-2 h-4 w-4" />
+                Lacak
+              </Button>
+            </form>
+          </Form>
+        </CardContent>
+      </Card>
         
-        {searchedComplaint !== undefined && (
-          <div className="mt-6 text-left transition-all duration-300">
-            {searchedComplaint === null ? (
-              <Alert variant="destructive">
-                <Terminal className="h-4 w-4" />
-                <AlertTitle>Tidak Ditemukan</AlertTitle>
-                <AlertDescription>
-                  Tidak ada keluhan yang ditemukan dengan ID tersebut. Harap periksa kembali ID dan coba lagi.
-                </AlertDescription>
-              </Alert>
-            ) : (
-              <Card>
-                <CardHeader>
-                  <div className="flex justify-between items-center">
-                    <CardTitle>Detail Keluhan</CardTitle>
-                    <Badge variant={getStatusVariant(searchedComplaint.status)}>{searchedComplaint.status}</Badge>
-                  </div>
-                  <CardDescription>
-                    ID: {searchedComplaint.id}
-                  </CardDescription>
-                </CardHeader>
-                <CardContent className="space-y-4">
+      {searchedComplaint !== undefined && (
+        <div className="mt-6 text-left transition-all duration-300">
+          {searchedComplaint === null ? (
+            <Alert variant="destructive">
+              <Terminal className="h-4 w-4" />
+              <AlertTitle>Tidak Ditemukan</AlertTitle>
+              <AlertDescription>
+                Tidak ada keluhan yang ditemukan dengan ID tersebut. Harap periksa kembali ID dan coba lagi.
+              </AlertDescription>
+            </Alert>
+          ) : (
+            <Card className="shadow-xl bg-white/80 backdrop-blur-sm">
+              <CardHeader>
+                <div className="flex justify-between items-center">
+                  <CardTitle>Detail Keluhan</CardTitle>
+                  <Badge variant={getStatusVariant(searchedComplaint.status)}>{searchedComplaint.status}</Badge>
+                </div>
+                <CardDescription>
+                  ID: {searchedComplaint.id}
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div>
+                  <h4 className="font-semibold">Kategori</h4>
+                  <p className="text-muted-foreground">{searchedComplaint.category}</p>
+                </div>
                   <div>
-                    <h4 className="font-semibold">Kategori</h4>
-                    <p className="text-muted-foreground">{searchedComplaint.category}</p>
-                  </div>
-                   <div>
-                    <h4 className="font-semibold">Dikirim Pada</h4>
-                    <p className="text-muted-foreground">{format(new Date(searchedComplaint.createdAt), 'd MMMM yyyy', { locale: id })}</p>
-                  </div>
-                  <div>
-                    <h4 className="font-semibold">Keluhan</h4>
-                    <p className="text-muted-foreground bg-secondary p-3 rounded-md">{searchedComplaint.text}</p>
-                  </div>
-                </CardContent>
-              </Card>
-            )}
-          </div>
-        )}
-      </CardContent>
-    </Card>
+                  <h4 className="font-semibold">Dikirim Pada</h4>
+                  <p className="text-muted-foreground">{format(new Date(searchedComplaint.createdAt), 'd MMMM yyyy, HH:mm', { locale: id })}</p>
+                </div>
+                <div>
+                  <h4 className="font-semibold">Keluhan</h4>
+                  <p className="text-muted-foreground bg-slate-100 p-3 rounded-md">{searchedComplaint.text}</p>
+                </div>
+              </CardContent>
+            </Card>
+          )}
+        </div>
+      )}
+    </>
   );
 }
