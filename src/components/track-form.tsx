@@ -57,12 +57,12 @@ export function TrackForm() {
       <Card className="w-full shadow-xl bg-white/80 backdrop-blur-sm">
         <CardContent className="pt-6">
           <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="flex items-start gap-2">
+            <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col sm:flex-row items-start gap-2">
               <FormField
                 control={form.control}
                 name="trackingId"
                 render={({ field }) => (
-                  <FormItem className="flex-grow">
+                  <FormItem className="flex-grow w-full">
                     <FormControl>
                       <Input placeholder="Masukkan ID pelacakanmu (misal, AS-12345-ABCDE)" {...field} />
                     </FormControl>
@@ -70,7 +70,7 @@ export function TrackForm() {
                   </FormItem>
                 )}
               />
-              <Button type="submit">
+              <Button type="submit" className="w-full sm:w-auto">
                 <Search className="mr-2 h-4 w-4" />
                 Lacak
               </Button>
@@ -92,13 +92,15 @@ export function TrackForm() {
           ) : (
             <Card className="shadow-xl bg-white/80 backdrop-blur-sm">
               <CardHeader>
-                <div className="flex justify-between items-center">
-                  <CardTitle>Detail Keluhan</CardTitle>
-                  <Badge variant={getStatusVariant(searchedComplaint.status)}>{searchedComplaint.status}</Badge>
+                <div className="flex justify-between items-start">
+                  <div className="flex-grow">
+                    <CardTitle>Detail Keluhan</CardTitle>
+                    <CardDescription>
+                      ID: {searchedComplaint.id}
+                    </CardDescription>
+                  </div>
+                  <Badge variant={getStatusVariant(searchedComplaint.status)} className="flex-shrink-0 mt-1">{searchedComplaint.status}</Badge>
                 </div>
-                <CardDescription>
-                  ID: {searchedComplaint.id}
-                </CardDescription>
               </CardHeader>
               <CardContent className="space-y-4">
                 <div>
@@ -111,7 +113,7 @@ export function TrackForm() {
                 </div>
                 <div>
                   <h4 className="font-semibold">Keluhan</h4>
-                  <p className="text-muted-foreground bg-slate-100 p-3 rounded-md">{searchedComplaint.text}</p>
+                  <p className="text-muted-foreground bg-slate-100 p-3 rounded-md break-words">{searchedComplaint.text}</p>
                 </div>
               </CardContent>
             </Card>
