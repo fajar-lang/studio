@@ -8,6 +8,7 @@ import { AddAdminForm } from "./add-admin-form";
 import { AdminsList } from "./admins-list";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Separator } from "@/components/ui/separator";
+import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '../ui/card';
 
 export function AdminDashboard() {
   const { isLoading: isLoadingComplaints } = useComplaints();
@@ -41,12 +42,20 @@ export function AdminDashboard() {
       {loggedInAdmin?.role === 'superadmin' && (
         <>
           <Separator />
-          <div className="grid md:grid-cols-2 gap-8">
-            <div>
-              <h2 className="text-2xl font-bold tracking-tight">Manajemen Admin</h2>
-              <p className="text-muted-foreground">Tambah atau lihat admin lain.</p>
-              <AdminsList />
-            </div>
+          <div className="mt-4">
+            <h2 className="text-2xl font-bold tracking-tight">Manajemen Admin</h2>
+            <p className="text-muted-foreground">Tambah atau lihat admin lain di sistem.</p>
+          </div>
+          <div className="grid md:grid-cols-2 gap-8 items-start">
+            <Card>
+                <CardHeader>
+                    <CardTitle>Daftar Admin</CardTitle>
+                    <CardDescription>Daftar semua admin dengan peran reguler.</CardDescription>
+                </CardHeader>
+                <CardContent>
+                    <AdminsList />
+                </CardContent>
+            </Card>
             <AddAdminForm />
           </div>
         </>

@@ -28,25 +28,27 @@ export default function AdminPage() {
 
   if (!isClient || isAdminLoading) {
     return (
-      <div className="flex justify-center items-center h-screen">
+      <div className="flex justify-center items-center h-screen bg-muted">
         <p>Memuat...</p>
       </div>
     );
   }
 
   return (
-    <div className="container mx-auto px-4 py-8">
-      {loggedInAdmin ? (
-          <>
-            <div className="text-right mb-4">
-                 <span className="text-muted-foreground mr-4">
-                    Masuk sebagai <strong>{loggedInAdmin.username}</strong> ({loggedInAdmin.role})
-                </span>
-                <button onClick={handleLogout} className="text-sm text-primary hover:underline">Keluar</button>
-            </div>
-            <AdminDashboard />
-          </>
-      ) : <AdminLogin onLoginSuccess={handleLoginSuccess} />}
+    <div className="min-h-screen bg-muted">
+        <div className="container mx-auto px-4 py-8">
+            {loggedInAdmin ? (
+                <>
+                    <div className="text-right mb-6">
+                        <span className="text-muted-foreground mr-4">
+                            Masuk sebagai <strong>{loggedInAdmin.username}</strong> ({loggedInAdmin.role})
+                        </span>
+                        <button onClick={handleLogout} className="text-sm text-primary hover:underline">Keluar</button>
+                    </div>
+                    <AdminDashboard />
+                </>
+            ) : <AdminLogin onLoginSuccess={handleLoginSuccess} />}
+        </div>
     </div>
   );
 }

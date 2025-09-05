@@ -15,9 +15,10 @@ import { id } from 'date-fns/locale';
 
 export function AdminsList() {
   const { admins } = useAdmins();
+  const regularAdmins = admins.filter(a => a.role !== 'superadmin');
 
   return (
-    <div className="mt-4 rounded-md border">
+    <div className="rounded-md border">
         <Table>
             <TableHeader>
               <TableRow>
@@ -27,8 +28,8 @@ export function AdminsList() {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {admins.length > 1 ? (
-                admins.filter(a => a.role !== 'superadmin').map((admin) => (
+              {regularAdmins.length > 0 ? (
+                regularAdmins.map((admin) => (
                   <TableRow key={admin.id}>
                     <TableCell className="font-medium">{admin.username}</TableCell>
                     <TableCell>
@@ -44,7 +45,7 @@ export function AdminsList() {
               ) : (
                 <TableRow>
                   <TableCell colSpan={3} className="h-24 text-center">
-                    Tidak ada admin lain yang ditemukan.
+                    Tidak ada admin reguler yang ditemukan.
                   </TableCell>
                 </TableRow>
               )}
