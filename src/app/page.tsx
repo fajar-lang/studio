@@ -1,6 +1,7 @@
 import { ComplaintForm } from '@/components/complaint-form';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Book, GraduationCap, Lightbulb } from 'lucide-react';
+import { cn } from '@/lib/utils';
 
 const Ornament = ({ icon, className, style }: { icon: React.ReactNode, className?: string, style?: React.CSSProperties }) => (
   <div className={cn('absolute rounded-full bg-white/50 p-3 shadow-md animate-float', className)} style={style}>

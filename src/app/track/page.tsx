@@ -1,8 +1,9 @@
 import { TrackForm } from '@/components/track-form';
 import { Book, GraduationCap, Lightbulb } from 'lucide-react';
+import { cn } from '@/lib/utils';
 
-const Ornament = ({ icon, className, style }: { icon: React.ReactNode, className: string, style?: React.CSSProperties }) => (
-  <div className={`absolute rounded-full bg-white/50 p-3 shadow-md animate-float ${className}`} style={style}>
+const Ornament = ({ icon, className, style }: { icon: React.ReactNode, className?: string, style?: React.CSSProperties }) => (
+  <div className={cn('absolute rounded-full bg-white/50 p-3 shadow-md animate-float', className)} style={style}>
     {icon}
   </div>
 );
