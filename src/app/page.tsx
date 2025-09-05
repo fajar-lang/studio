@@ -23,10 +23,10 @@ export default function Home() {
         <section className="flex flex-col items-center text-center z-10">
           <div className="max-w-3xl">
             <h1 className="text-4xl md:text-6xl font-bold tracking-tighter mb-4 font-headline bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-sky-400">
-              Aspirasi Siswa
+              Aspirasi Siswa SMKN 2 Luwu Timur
             </h1>
             <p className="text-lg md:text-xl text-slate-600 mb-8">
-              Platform anonim untuk kamu menyuarakan keprihatinan dan berkontribusi untuk lingkungan sekolah yang lebih baik.
+              Platform anonim untuk kamu menyuarakan keprihatinan dan berkontribusi untuk lingkungan SMKN 2 Luwu Timur yang lebih baik.
             </p>
           </div>
           <Card className="w-full max-w-2xl shadow-xl bg-white/80 backdrop-blur-sm">

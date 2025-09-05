@@ -4,8 +4,8 @@ import { Header } from '@/components/common/header';
 import { Toaster } from "@/components/ui/toaster"
 
 export const metadata: Metadata = {
-  title: 'Aspirasi Siswa',
-  description: 'Platform anonim bagi siswa untuk menyuarakan keprihatinan mereka.',
+  title: 'Aspirasi Siswa - SMKN 2 Luwu Timur',
+  description: 'Platform anonim bagi siswa SMKN 2 Luwu Timur untuk menyuarakan keprihatinan mereka.',
 };
 
 export default function RootLayout({
