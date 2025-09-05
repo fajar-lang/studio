@@ -27,7 +27,7 @@ export function Header() {
   }
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b bg-card shadow-sm">
+    <header className="sticky top-0 z-50 w-full border-b border-white/30 bg-white/50 backdrop-blur-lg shadow-sm">
       <div className="container mx-auto flex h-16 items-center justify-between px-4">
         <Link href="/" className="flex items-center gap-2 font-bold text-lg">
           <MessageSquarePlus className="h-6 w-6 text-primary" />
@@ -42,7 +42,7 @@ export function Header() {
               href={link.href}
               className={cn(
                 'transition-colors hover:text-primary',
-                pathname === link.href ? 'text-primary' : 'text-muted-foreground'
+                pathname === link.href ? 'text-primary' : 'text-slate-600'
               )}
             >
               {link.label}
@@ -59,7 +59,7 @@ export function Header() {
                 <span className="sr-only">Buka menu</span>
               </button>
             </SheetTrigger>
-            <SheetContent side="right" className="w-[240px] sm:w-[300px]">
+            <SheetContent side="left" className="w-[240px] sm:w-[300px]">
                 <div className="p-4">
                     <nav className="flex flex-col space-y-4 text-lg">
                       {navLinks.map((link) => (
