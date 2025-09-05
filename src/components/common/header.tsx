@@ -8,6 +8,8 @@ import { useState } from 'react';
 import {
   Sheet,
   SheetContent,
+  SheetHeader,
+  SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet"
 
@@ -60,23 +62,26 @@ export function Header() {
               </button>
             </SheetTrigger>
             <SheetContent side="left" className="w-[240px] sm:w-[300px]">
-                <div className="p-4">
-                    <nav className="flex flex-col space-y-4 text-lg">
-                      {navLinks.map((link) => (
-                        <Link
-                          key={link.href}
-                          href={link.href}
-                          onClick={handleLinkClick}
-                          className={cn(
-                            'transition-colors hover:text-primary p-2 rounded-md',
-                            pathname === link.href ? 'text-primary bg-secondary' : 'text-foreground'
-                          )}
-                        >
-                          {link.label}
-                        </Link>
-                      ))}
-                    </nav>
-                </div>
+              <SheetHeader>
+                <SheetTitle>Navigasi</SheetTitle>
+              </SheetHeader>
+              <div className="p-4">
+                  <nav className="flex flex-col space-y-4 text-lg">
+                    {navLinks.map((link) => (
+                      <Link
+                        key={link.href}
+                        href={link.href}
+                        onClick={handleLinkClick}
+                        className={cn(
+                          'transition-colors hover:text-primary p-2 rounded-md',
+                          pathname === link.href ? 'text-primary bg-secondary' : 'text-foreground'
+                        )}
+                      >
+                        {link.label}
+                      </Link>
+                    ))}
+                  </nav>
+              </div>
             </SheetContent>
           </Sheet>
         </div>
