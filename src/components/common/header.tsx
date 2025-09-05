@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { cn } from '@/lib/utils';
-import { MessageSquarePlus, Menu } from 'lucide-react';
+import { MessageSquarePlus, Menu, GraduationCap } from 'lucide-react';
 import { useState } from 'react';
 import {
   Sheet,
@@ -26,15 +26,16 @@ export function Header() {
   }
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b border-white/30 bg-white/50 backdrop-blur-lg shadow-sm">
-      <div className="container mx-auto flex h-16 items-center justify-between px-4">
-        <Link href="/" className="flex items-center gap-2 font-bold text-lg">
+    <header className="sticky top-0 z-50 w-full border-b border-white/30 bg-gradient-sky shadow-sm overflow-hidden">
+      <div className="container mx-auto flex h-16 items-center justify-between px-4 relative">
+        <GraduationCap className="h-16 w-16 text-white/30 absolute -top-4 -left-8" />
+        <Link href="/" className="flex items-center gap-2 font-bold text-lg z-10">
           <MessageSquarePlus className="h-6 w-6 text-primary" />
           <span>Aspirasi Siswa</span>
         </Link>
         
         {/* Desktop Nav */}
-        <nav className="hidden md:flex items-center space-x-6 text-sm font-medium">
+        <nav className="hidden md:flex items-center space-x-6 text-sm font-medium z-10">
           {navLinks.map((link) => (
             <Link
               key={link.href}
@@ -50,7 +51,7 @@ export function Header() {
         </nav>
 
         {/* Mobile Nav */}
-        <div className="md:hidden">
+        <div className="md:hidden z-10">
           <Sheet open={isSheetOpen} onOpenChange={setIsSheetOpen}>
             <SheetTrigger asChild>
               <button className="p-2">
@@ -79,6 +80,7 @@ export function Header() {
             </SheetContent>
           </Sheet>
         </div>
+        <GraduationCap className="h-20 w-20 text-white/30 absolute -bottom-8 -right-8" />
       </div>
     </header>
   );
